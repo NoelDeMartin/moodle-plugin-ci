@@ -40,11 +40,15 @@ $CFG->behat_wwwroot       = 'http://localhost:8000';
 $CFG->behat_faildump_path = '/path/to/moodledata/behat_dump';
 $CFG->behat_profiles      = [
     'default' => [
-        'browser' => 'firefox',
+        'browser' => 'chrome',
         'wd_host' => 'http://localhost:4444/wd/hub',
     ],
     'chrome' => [
         'browser' => 'chrome',
+        'wd_host' => 'http://localhost:4444/wd/hub',
+    ],
+    'firefox' => [
+        'browser' => 'firefox',
         'wd_host' => 'http://localhost:4444/wd/hub',
     ],
 ];

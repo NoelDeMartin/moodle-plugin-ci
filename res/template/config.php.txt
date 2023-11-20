@@ -40,11 +40,15 @@ $CFG->behat_wwwroot       = '{{BEHATWWWROOT}}';
 $CFG->behat_faildump_path = '{{BEHATDUMP}}';
 $CFG->behat_profiles      = [
     'default' => [
-        'browser' => 'firefox',
+        'browser' => 'chrome',
         'wd_host' => '{{BEHATWDHOST}}',
     ],
     'chrome' => [
         'browser' => 'chrome',
+        'wd_host' => '{{BEHATWDHOST}}',
+    ],
+    'firefox' => [
+        'browser' => 'firefox',
         'wd_host' => '{{BEHATWDHOST}}',
     ],
 ];

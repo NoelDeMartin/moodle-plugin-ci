@@ -145,6 +145,7 @@ jobs:
         moodle-plugin-ci phpunit --verbose --coverage-text --fail-on-warning
         moodle-plugin-ci behat --profile default
         moodle-plugin-ci behat --profile chrome
+        moodle-plugin-ci behat --profile firefox
 
   buildphar:
     name: Build moodle-plugin-ci.phar
@@ -258,3 +259,4 @@ jobs:
         php build/moodle-plugin-ci.phar phpunit --verbose --coverage-text --fail-on-warning
         php build/moodle-plugin-ci.phar behat --profile default
         php build/moodle-plugin-ci.phar behat --profile chrome
+        php build/moodle-plugin-ci.phar behat --profile firefox
