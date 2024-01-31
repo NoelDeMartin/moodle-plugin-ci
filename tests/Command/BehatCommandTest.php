@@ -46,7 +46,10 @@ class BehatCommandTest extends MoodleTestCase
             $cmdOptions
         );
         $commandTester->execute($cmdOptions);
-        $this->lastCmd = $command->execute->lastCmd; // We need this for assertions against the command run.
+
+        // We need these for assertions against the commands run.
+        $this->allCmds = $command->execute->allCmds;
+        $this->lastCmd = $command->execute->lastCmd;
 
         return $commandTester;
     }
@@ -67,6 +70,43 @@ class BehatCommandTest extends MoodleTestCase
         $this->assertSame(0, $commandTester->getStatusCode());
         $this->assertMatchesRegularExpression('/--tags=@tag1&&@tag2/', $this->lastCmd);
         $this->assertDoesNotMatchRegularExpression('/--tags=@local_ci/', $this->lastCmd);
+    }
+
+    public function testExecuteWithSeleniumImageOption()
+    {
+        $commandTester = $this->executeCommand(null, null, ['--start-servers' => true, '--selenium' => 'seleniarm/standalone-chromium:latest']);
+        $this->assertSame(0, $commandTester->getStatusCode());
+        $this->assertMatchesRegularExpression('/seleniarm\/standalone-chromium:latest/', $this->allCmds[1]);
+    }
+
+    public function testExecuteWithSeleniumImageEnv()
+    {
+        putenv('MOODLE_BEHAT_SELENIUM_IMAGE=seleniarm/standalone-chromium:latest');
+
+        $commandTester = $this->executeCommand(null, null, ['--start-servers' => true]);
+        $this->assertSame(0, $commandTester->getStatusCode());
+        $this->assertMatchesRegularExpression('/seleniarm\/standalone-chromium:latest/', $this->allCmds[1]);
+    }
+
+    public function testExecuteWithSeleniumImageChromeEnv()
+    {
+        putenv('MOODLE_BEHAT_SELENIUM_IMAGE=');
+        putenv('MOODLE_BEHAT_SELENIUM_CHROME_IMAGE=selenium/standalone-chrome:4');
+
+        $commandTester = $this->executeCommand(null, null, ['--start-servers' => true, '--profile' => 'chrome']);
+        $this->assertSame(0, $commandTester->getStatusCode());
+        $this->assertMatchesRegularExpression('/selenium\/standalone-chrome:4/', $this->allCmds[1]);
+    }
+
+    public function testExecuteWithSeleniumImageFirefoxEnv()
+    {
+        putenv('MOODLE_BEHAT_SELENIUM_IMAGE=');
+        putenv('MOODLE_BEHAT_SELENIUM_FIREFOX_IMAGE=selenium/standalone-firefox:4');
+        file_put_contents("{$this->moodleDir}/composer.lock", '');
+
+        $commandTester = $this->executeCommand(null, null, ['--start-servers' => true, '--profile' => 'firefox']);
+        $this->assertSame(0, $commandTester->getStatusCode());
+        $this->assertMatchesRegularExpression('/selenium\/standalone-firefox:4/', $this->allCmds[1]);
     }
 
     public function testExecuteWithName()
